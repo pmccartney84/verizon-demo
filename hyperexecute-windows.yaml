@@ -1,0 +1,57 @@
+version: 0.2
+### ---------- CONFIG PARAMETERS ----------
+#Timeouts
+globalTimeout: 150
+testSuiteTimeout: 150
+testSuiteStep: 150
+
+#Run Config
+runson: win
+concurrency: 10
+
+autosplit: true
+smartGrid: true
+#Retry
+retryOnFailure: true
+maxRetries: 1
+#failFast:
+#  maxNumberOfTests: 4
+
+runtime:
+  language: java
+  version: 20
+
+jobLabel: [ 'Web', 'Selenium', 'Windows', 'Demo']
+
+
+
+### ---------- HOW TO FIND AND EXECUTE TESTS ----------
+framework:
+  name: maven/testng
+  defaultReports: false
+  discoveryType: xmltest
+  runnerFlags: ["-DselectedTests=$test"]
+
+
+
+### ---------- PREPARE TEST ENV ----------
+pre:
+  - mvn test-compile
+
+
+
+### ---------- REPORTING AND CLEANUP ----------
+report: true
+partialReports:
+    frameworkName: testng
+    location: target/surefire-reports/html
+    type: html
+    email:
+      to:
+        - patrickm+hyex@lambdatest.com
+        - patrickm@lambdatest.com
+uploadArtefacts:
+  - name: Surefire Report
+    path:
+      - target/surefire-reports/**
+generateArtifactAfterEveryStage: true
